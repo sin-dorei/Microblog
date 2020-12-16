@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use PhpParser\Node\Expr\FuncCall;
+use Str;
 
 class User extends Authenticatable
 {
@@ -27,6 +29,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public static function booted()
+    {
+        // parent::boot();
+
+        static::creating(function ($user) {
+            $user->activation_token = Str::random(10);
+        });
+    }
 
     /**
      * 指定模型属性的数据类型
