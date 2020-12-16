@@ -88,6 +88,6 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model)
     {
-        //
+        return $user->is_admin && $user->id !== $model->id;
     }
 }
