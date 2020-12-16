@@ -7,11 +7,13 @@ use App\Models\User;
 
 class UsersController extends Controller
 {
-    public function create() {
+    public function create()
+    {
         return view('users.create');
     }
 
-    public function show(User $user) {
+    public function show(User $user)
+    {
 
         return view('users.show', compact('user'));
     }
@@ -24,6 +26,14 @@ class UsersController extends Controller
             'password' => 'required|confirmed|min:6'
         ]);
 
-        return;
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+        // dd(route('users.show', [$user]));
+        session()->flash('success', '欢迎，您将在这里开启一段新的旅程~');
+
+        return redirect()->route('users.show', $user);
     }
 }
