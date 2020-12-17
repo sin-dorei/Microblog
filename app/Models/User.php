@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use PhpParser\Node\Expr\FuncCall;
 use Str;
 
 class User extends Authenticatable
@@ -18,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'aemail', 'password',
+        'name', 'email', 'password',
     ];
 
     /**
@@ -52,5 +51,10 @@ class User extends Authenticatable
     {
         $hash = md5(strtolower(trim($this->attributes['email'])));
         return "http://www.gravatar.com/avatar/$hash?s=$size";
+    }
+
+    public function statuses()
+    {
+        return $this->hasMany(Status::class);
     }
 }
