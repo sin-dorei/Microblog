@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class)->times(99)->create();
+        factory(User::class)->times(11)->create();
 
         $user = User::find(1);
         $user->name = '朱武';
@@ -23,6 +23,11 @@ class UserSeeder extends Seeder
         $user = User::find(2);
         $user->name = '黄信';
         $user->email = 'huangxin@qq.com';
+        $user->save();
+
+        $user = User::find(9);
+        $user->name = '无名神魔';
+        $user->email = '576051199@qq.com';
         $user->save();
     }
 }
