@@ -4,27 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Status;
 use Illuminate\Http\Request;
+use Auth;
 
 class StatusesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function __construct()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $this->middleware('auth');
     }
 
     /**
@@ -35,41 +21,21 @@ class StatusesController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $this->validate($request, [
+            'content' => 'required|max:140'
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Statuses  $statuses
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Status $statuses)
-    {
-        //
-    }
+        Auth::user()->statuses()->create([
+            'content' => $request['content']
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Statuses  $statuses
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Status $statuses)
-    {
-        //
-    }
+        // Status::create([
+        //     'content' => $request->content,
+        //     'user_id' => Auth::id()
+        // ]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Statuses  $statuses
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Status $statuses)
-    {
-        //
+        session()->flash('success', '发布成功！');
+        return redirect()->back();
     }
 
     /**
