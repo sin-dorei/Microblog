@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Str;
+use Barryvdh\Debugbar\Facade as Debugbar;
 
 class User extends Authenticatable
 {
@@ -60,7 +61,17 @@ class User extends Authenticatable
 
     public function feed()
     {
-        return $this->statuses()->orderBy('created_at', 'desc');
+        $user_ids = $this->followings->pluck('id')->toArray();
+        array_push($user_ids, $this->id);
+
+        // $data = Status::whereIn('user_id', $user_ids)->with('user')->orderBy('created_at', 'desc')->get();
+
+        // foreach($data as $item)
+        // {
+        //     Debugbar::info($item->id);
+        // }
+
+        return Status::whereIn('user_id', $user_ids)->with('user')->orderBy('created_at', 'desc');
     }
 
     public function followers()
